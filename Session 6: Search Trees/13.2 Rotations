@@ -1,0 +1,54 @@
+为什么需要变色(recolor)和旋转(rotation)？
+
+在搜索树的插入(insert)和删除(delete)过程中，由于其对树进行了修改，结果可能违反13.1节中列出的红黑性质。为了维护这些性质，必须要改变树中某些结点的颜色以及指针结构。
+  (a). 变色 —— 红变黑，或黑边红
+  (b). 修改指针结构 —— 旋转
+                      旋转分为：左旋、右旋
+
+-----------------------------------------------------------------
+
+LEFT-ROTATE(T, x)
+    y = x.right       // set y
+    x.right = y.left      // turn y's left subtree into x's right subtree
+    if y.left != T.nil
+        y.left.p = x
+    y.p = x.p      // link x's parent to y 
+    if x.p == T.nil
+        T.root = y
+    else if x == x.p.left
+        x.p.left = y
+    else
+        x.p.right = y
+    y.left = x      // put x on y's left
+    x.p = y
+    
+-----------------------------------------------------------------
+
+RIGHT-ROTATE(T, x)
+    y = x.left       // set y
+    x.left = y.right      // turn y's left subtree into x's right subtree
+    if y.right != T.nil
+        y.right.p = x
+    y.p = x.p      // link x's parent to y 
+    if x.p == T.nil
+        T.root = y
+    else if x == x.p.left
+        x.p.left = y
+    else
+        x.p.right = y
+    y.right = x      // put x on y's left
+    x.p = y
+    
+-----------------------------------------------------------------
+
+1、旋转操作不会改变树中序遍历的顺序
+2、旋转操作通过降低高度高的子树的高度，增加高度低的子树的高度来维护二叉树的平衡
+
+-----------------------------------------------------------------
+
+练习：
+
+√ 13.2-1  写出 RIGHT-ROTATION 的伪代码
+13.2-2  证明：在任何一棵有n个结点的二叉搜索树中，恰有n-1种可能的旋转
+13.2-3  设在图13-2左边一棵树中，a、b 和 c分别为子树 α、β 和 γ 中的任意结点。当结点x左旋之后，a、b 和 c 的深度会如何变化？
+13.2-4  证明：任何一棵含n个结点的二叉搜索树可以通过O(n)次旋转，转变为其他任何一棵含n个结点的二叉搜索树。（提示：先证明至多n-1次右旋足以将树转变为一条右侧伸展的链。）

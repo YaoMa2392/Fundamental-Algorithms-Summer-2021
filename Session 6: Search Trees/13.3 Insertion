@@ -1,0 +1,55 @@
+红黑树的插入分为2步：(1)插入、(2)修复
+  (1)插入：操作与二叉搜索树相同。插入结点的颜色为红色。
+  (2)修复：
+         插入z后分为4种情况：
+            a. z是根结点（即z插入前是一棵空树）
+            ———— 根据性质2（根结点和叶结点(nil)是黑色的），只要将z重新上色为黑色即可。
+            b. z的uncle node是红色的
+            ———— 根据性质2（如果一个结点是红色，那么它的孩子是黑色的），将z的 uncle node、father node 和 grandfather node 全部换色（红变黑，黑变红）
+            c. z的uncle node是黑色的，并且局部呈现直线 （直线：z、z的父节点、z的祖父结点构成直线）
+            ———— 先旋转z的祖父结点：直线朝右，左旋；直线朝左，右旋。再将原来的父结点和祖父结点变色。
+            d. z的uncle node是黑色的，并且局部呈现三角形 （三角形：z、z的父节点、z的祖父结点构成三角形）
+            ———— 先旋转z的父结点（处理成直线），然后执行情况c。
+            
+---------------------------------------------------------------------------------------------------------
+
+RB-INSERT(T, z)
+    y = T.nil
+    x = T.root
+    while x != T.nil
+        y = x
+        if z.key < x.key
+            x = x.left
+        else
+            x = x.right
+    z.p = y
+    if y == T.nil
+        T.root = z
+    else if z.key < y.key
+        y.left = z
+    else
+        y.right = z
+    z.left = T.nil
+    z.right = T.nil
+    z.color = RED
+    RB-INSERT-FIXUP(T, z)
+    
+
+RB-INSERT-FIXUP(T, z)
+    while z.p.color == RED
+        if z.p == z.p.p.left
+            y = z.p.p.right
+            if y.color == RED
+                z.p.color = BLACK
+                y.color = BLACK
+                z.p.p.color = RED
+                z = z.p.p 
+            else if z == z.p.right
+                z = z.p 
+                LEFT-ROTATE(T, z)
+            z.p.color = BLACK
+            z.p.p.color = RED
+            RIGHT-ROTATE(T, z.p.p)
+        else(same as then clause
+                with "right" and "left" exchanged)
+    T.root.color = BLACK

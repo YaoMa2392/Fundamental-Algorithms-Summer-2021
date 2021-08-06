@@ -1,0 +1,29 @@
+1. Insertion
+
+要将一个新值v插入到一棵二叉搜索树T中，需要调用TREE-INSERT。该过程以结点z作为输入，其中z.key = v, z.left = NIL, z.right = NIL. 这个过程修改了T和z的某些属性，来把z插入到树中的相应位置上。
+
+TREE-INSERT(T, z)
+    y = NIL
+    x = T.root
+    while x != NIL
+        y = x
+        if z.key < x.key
+            x = x.left
+        else
+            x = x.right
+    z.p = y
+    if y == NIL
+        T.root = z    // tree T was empty
+    else if z.key < y.key
+        y.left = z
+    else
+        y.right = x
+        
+--------------------------------------------------
+
+2. Deletion
+
+分为3种基本情况：
+              (1). 如果z没有孩子结点，那么只是简单地将它删除，并修改它的父结点，用NIL作为孩子来替换z。
+              (2). 如果z只有一个孩子，那么将这个孩子提升到树中z的位置上，并修改z的父结点，用z的孩子来替换z。
+       *麻烦* (3). 如果z右两个孩子，那么找z的后继y（一定在z的右子树中），并让y占据树中z的位置。z的原来右子树部分成为y的新的右子树，并且z的左子树成为y的新的左子树。

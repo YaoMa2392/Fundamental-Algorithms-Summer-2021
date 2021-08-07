@@ -1,0 +1,116 @@
+A graph G is defined as G = (V,E)
+     V: a finite, nonempty set of vertices
+     E: a set of edges / pairs of vertices
+     
+                 1 ---------- 2
+               / |         /  |
+            /    |      /     |
+         /       |   /        |
+       3         4 -----------5
+      
+      V = {1, 2, 3, 4, 5}
+      E = {(1, 2), (1, 3), (1, 4), (2, 4), (2, 5), (4, 5)}
+      
+ ---------------------------------------------------------------
+ 
+ Graph type:
+     1. Undirected: edge(u,v) = (v,u)
+     2. Directed: edge(u,v) goes from vertex u to vertex v; (u,v) != (v,u)
+ 
+                 1 ---------- 2                    1 <---------- 2
+               / |         /  |                  / ^           / |
+            /    |      /     |               /    |        /    |
+         /       |   /        |            <       |     <       +
+       3         4 -----------5         3          4 <---------- 5
+  
+      V = {1, 2, 3, 4, 5}                V = {1, 2, 3, 4, 5}   
+      E = {(1, 2), (1, 3), (1, 4),       E = {(2, 1), (1, 3), (4, 1), 
+           (2, 4), (2, 5), (4, 5)}            (2, 4), (2, 5), (5, 4)}
+       
+_____________________________________________________________________
+
+常用名词：
+
+Adjacent (相邻)
+    If there is an edge(u,v), then u and v are adjacent.
+    
+Incident (作用)
+    If there is an edge(u,v), the edge(u,v) is incident from u and is incident to v.
+    
+Subgraph (子图)
+    If a graph G' = (V',E') is a subgraph of G = (V,E), then V' 属于 V, and E' 属于 E.
+    
+Degree (度)
+    The degree of a vertex u is the number of edges incident on u
+       In-degree of u: #edges(x,u) in a directed graph (别的点到u)
+       Out-degree of u: #edges(u,x) in a directed graph (u到别的点)
+       Degree = in-degree + out-degree
+           Isolated vertex: degree = 0
+                        |E| = (Sum<i>d_i) / 2
+      
+Path
+    A sequence of edges that connect a sequence of vertices
+    If there is a path from u(source) to v(target), there is a sequence of edges (u, i_1), (i_1, i_2), ..., (i_k-1, i_k), (i_k, v)
+    Reachable: v is reachable from u if there exists a path from u to v.
+    
+Simple Path
+    All vertices except for u and v are all distinct (path中的点不能重复,不能有重复的路径)
+    
+Cycle
+    A simple path where u and v are the same
+    
+Subpath
+    A subsequence of the path
+    
+Connected
+    Two vertices are connected if there is a path between them
+    A connected graph has a path from every vertex to every other
+
+Tree
+    A connected, acyclic, undirected graph
+    
+Forest
+    An acyclic, undirected but possibly disconnected graph
+
+--------------------------------------------------------------------
+
+Adjacency Matrix
+Adjacency matrix = V * V matrix with A[u][v] = 1 if (u,v) is an edge
+
+Complexity of Ajacency Matrix:
+      Space: Theta(n^2)
+      Time for querying an edge: Θ(1)
+      Time for inserting an edge: Θ(1)
+      Time for deleting an edge: Θ(1)
+      Time for listing all neighbors of a vertex: Θ(n)
+      Time for identifying all edges: Θ(n^2)
+      Time for finding in-degree and out-degree of a vertex?
+      
+--------------------------------------------------------------------
+
+Adjacency List
+Adjacency lists = vertex indexed array of lists
+   One list per vertex, where for u属于V, A[u] consistes of all vertices adjacent to u
+   
+Complexity of Adjacency List
+      Space: Theta(m + n)      
+      Time for querying an edge: Θ(deg) -> Θ(log deg)
+      Time for inserting an edge: Θ(1) -> Θ(log deg)
+      Time for deleting an edge: Θ(deg) -> Θ(log deg)
+      Time for listing all neighbors of a vertex: Θ(deg)
+      Time for identifying all edges: Θ(m + n)
+      Time for finding in-degree and out-degree of a vertex?
+      
+--------------------------------------------------------------------
+Representation Comparison
+Matrix represenation is suitable for dense graphs
+List representation is suitable for sparse graphs
+Besides graph density, we may also choose a data structure based on the performance of other operations
+
+                  |  Space      Query       Insert     Delete     List a vertex's    Identify
+                  |             an edge     an edge    an edge    neighbors          all edges 
+Adjacency Matrix  |  Θ(n^2)      Θ(1)        Θ(1)       Θ(1)         Θ(n)             Θ(n^2) 
+Adjacency List    |  Θ(m + n)    Θ(deg)      Θ(1)       Θ(deg)       Θ(deg)           Θ(m + n)
+                              Θ(log deg)  Θ(log deg)  Θ(log deg)
+                              
+

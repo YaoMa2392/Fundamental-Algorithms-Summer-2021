@@ -1,0 +1,94 @@
+Breadth-First Search (BFS)
+    Input: directed/undirected graph G = (V,E) and sourcr s
+    Output: a breadth-first tree with root s(T_BFS) that contains all reachable vertices
+          - v.d: distance from s to v, for all v∈V
+                 Distance is the length of a shortest path in G  
+                 v.d = ∞, if v is not reachable from s
+                 v.d is also the depth of v in T_BFS (v.d是最短距离)
+          - v.π = u, if (u,v) is the last edge on the shortest path to v
+                 u is v's predecessor in T_BFS
+                 
+------------------------------------------------------------------------------
+  
+BFS(G, s)
+    for each vertex u ∈ G.V-{s}
+        u.color = WHITE
+        u.d = ∞
+        u.π = NIL
+    s.color = GRAY
+    s.d = o
+    s.π = NIL
+    Q = ∅
+    ENQUEUE(Q, s)
+    while Q != ∅
+        u = DEQUEUE(Q)
+        for each v ∈ G.adj[u]
+            if v.color == WHITE
+                v.color = GRAY
+                v.d = u.d + 1
+                v.π = u
+                ENQUEUE(Q, v)
+        u.color = BLACK
+
+O(n + SUM'u(deg(u) + 1)) = O(n + m)
+
+------------------------------------------------------------------------------
+
+Initially T_BFS contains only s
+As v is discovered from u, v and (u,v) are added to T_BFS
+    - T_BFS is not explicitly stored; can be reconstructed from v.π
+Implemented via a FIFO queue   
+Color the vertices to keep track of progress:
+    - GRAY: discovered (first time encountered)
+    - BLACK: finished (all adjacent vertices discovered)
+    - WHITE: undiscovered
+
+------------------------------------------------------------------------------
+
+Definition of δ(s,v): the shortest-path distance from s to v = the munimum number of edges in any path from s to v
+       - If there is no path from s to v, the δ(s,v) = ∞
+* The BFS algorithm finds the shortest-path distance to each reachable vertex in a graph G from a given source vertex s ∈ V.
+
+------------------------------------------------------------------------------
+
+Lemma 22.1
+s-v的最短路径一定会小于等于s-u的最短路径距离+1
+Let G = (V,E) be a directed or undirected graph, and let s ∈ V be an arbitrary vertex. Then, for any edge (u,v) ∈ E:
+                       δ(s,v) <= δ(s,u) + 1 
+
+Proof: ....
+
+------------------------------------------------------------------------------
+
+Lemma 22.2
+BFS算出的d值必定大于等于真正距离
+Let G = (V,E) be a directed or undirected graph, and suppose BFS is run on G from a given source vertex s ∈ V. Then upon termination, for each vertex v ∈ V, the value v.d computed by BFS satisfied v.d >= δ(s,v)
+
+Proof by induction: ...
+
+------------------------------------------------------------------------------
+
+Lemma 22.3 （先放进去的小 —— 从s开始一层一层往外扩，外层肯定大于内层）
+- Q中最后一个点的d值 <= Q中第一个点的d值+1
+- Q中第i个点的d值 <= Q中第i+1个点的d值
+Suppose that during the execution of BFS on a graph G = (V,E), the queue Q contains the vertices (v_1, v_2, ..., v_r), where v_1 is the head of Q and v_r is the tail. Then, v_r.d <= v_1.d + 1 and v_i.d <= v_i+1.d for 1 < i < r
+
+Proof by induction: ...
+
+------------------------------------------------------------------------------
+
+Corollary 22.4
+若 v_i 比 v_j 早加入 queue → v_i <= v_j
+Suppose that vertices v_i and v_j are enqueued during the execution of BFS, and that v_i is enqueued before v_j. Then v_i.d <= v_j.d at the time that v_j is enqueued
+
+Proof: ....
+
+------------------------------------------------------------------------------
+
+Theorem 22.5 - BFS Correctness
+Let G = (V,E) be a directed or undirected graph, and suppose that BFS is run on G from a given source vertx s ∈ V.
+    (1) BFS discovers every vertex v ∈ V that is reachable from the source s
+    (2) Upon termination, v.d = δ(s,v) for all v ∈ V
+    (3) For any vertex v != s that is reachable from s, one of the shortest paths from s to v is a shortest path from s to v.π followed by the edge (v.π, v)
+
+Proof: ....

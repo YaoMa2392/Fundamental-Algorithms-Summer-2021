@@ -1,0 +1,61 @@
+DFS(G)
+    for each vertex u ∈ G.V
+        u.color = WHITE
+        u.π = NIL
+    time = 0
+    for each vertex u ∈ G.V
+        if u.color == WHITE
+            DFS-VISIT(G,u)
+
+DFS-VISIT(G,u)
+    time = time + 1    // white vertex u has just been discovered
+    u.d = time 
+    u.color = GRAY
+    for each vertex v ∈ G.Adj[u]    // explore edge (u,v)
+        if v.color == WHITE
+            v.π = u
+            DFS-VISIT(G,v)
+    u.color = BLACK    // blacken u; it is finished
+    time = time + 1
+    u.f = time
+    
+    
+O(n + SUM'u(deg(u) + 1)) = O(n + m)
+
+-----------------------------------------------------------------------------
+
+Implemented via recursion (stack)
+Color the vertices to keep track of progress:
+     - GRAY: discovered (first time encountered)
+     - BLACK: finishes (all adjacent vertices discovered)
+     - WHITE: undiscovered
+     
+-----------------------------------------------------------------------------
+
+Parenthesis Theorem
+Parenthesis structure: represent the discovery of vertex u with a left parenthesis "(u" and represent its finishing by a right parenthesis "u)". In DFS, the parenthesises are properly nested.
+                         Properly nested: (x (y y) x)
+                         Not Properly nested: (x (y x) y)
+                         √： (s (z (y (x x) y) (w w) z) s) (t (v v) (u u) t)
+
+
+White Path Theorem
+In a DFS forest of a directed or undirected graph G = (V,E),
+     - vertex v is a descendant of vertex u in the forest  <--->  at the time u.d that the search          discovers u, there is a path from u to v in G consisting entirely of WHITE vertices
+
+Proof: ....
+
+
+Classification of Edges in G
+    · Tree Edge (GRAY to WHITE)
+        - Edges in the DFS forest
+        - Found when encountering a new vertex x by exploring (u,v)
+    · Back Edge (GRAY to GRAY)
+        - (u,v), from descendant u to ancestor v in a DFS tree
+    · Forward Edge (GRAY to BLACK)
+        - (u,v), from ancestor u to descendant v. Not a tree edge.
+    · Cross Edge (GRAY to BLACK)
+        - Any other edge between trees or subtrees. Can go between vertices in same DFS tree or in           diffrent DFS trees
+        
+In an undirected graph, back edge = forward edge.
+To avoid ambiguity, classify edge as the first type in the list that applies.
